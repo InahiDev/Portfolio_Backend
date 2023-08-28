@@ -1,6 +1,6 @@
 const express= require('express')
 const router = express.Router()
-const projectCtrl = require('../controllers/projects')
+const projectCtrl = require('../controllers/project')
 const multer = require('../middleware/multer-config')
 const auth = require('../middleware/auth')
 

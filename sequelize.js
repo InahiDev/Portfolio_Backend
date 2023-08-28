@@ -1,7 +1,6 @@
 const Sequelize = require('sequelize');
 const UserModel = require('./models/User');
 const ProjectModel = require('./models/Project')
-const StackModel = require('./models/Stack')
 const dotenv = require('dotenv')
 dotenv.config()
 
@@ -16,10 +15,6 @@ const sequelize = new Sequelize('portfolio_gabriel_delaigue_db', USERNAME, PSWD,
 
 const User = UserModel(sequelize, Sequelize)
 const Project = ProjectModel(sequelize, Sequelize)
-const Stack = StackModel(sequelize, Sequelize)
-
-Project.belongsToMany(Stack, { through: "Project_Stack"})
-Stack.belongsToMany(Project, { through: "Project_Stack"})
 
 sequelize.authenticate()
   .then(() => console.log('Database connexion correct'))
@@ -29,4 +24,4 @@ sequelize.sync()
   .then(() => console.log('Table created and/or updtated with Models!'))
   .catch((error) => console.log(`Update or creation of Tables failed: ${error}`))
 
-module.exports = { User, Project, Stack }
+module.exports = { User, Project }

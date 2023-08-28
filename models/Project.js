@@ -17,6 +17,51 @@ module.exports = (sequelize, type) => {
     },
     teaching: {
       type: type.STRING
+    },
+    HTML5: {
+      type: type.BOOLEAN,
+      allowNull: false,
+      defaultValue: true,
+    },
+    CSS3: {
+      type: type.BOOLEAN,
+      allowNull: false,
+      defaultValue: true,
+    },
+    Sass: {
+      type: type.BOOLEAN,
+      allowNull: false,
+      defaultValue: false,
+    },
+    JavaScript: {
+      type: type.BOOLEAN,
+      allowNull: false,
+      defaultValue: false,
+    },
+    VueJs: {
+      type: type.BOOLEAN,
+      allowNull: false,
+      defaultValue: false,
+    },
+    NodeJs: {
+      type: type.BOOLEAN,
+      allowNull: false,
+      defaultValue: false,
+    },
+    ExpressJs: {
+      type: type.BOOLEAN,
+      allowNull: false,
+      defaultValue: false,
+    },
+    NoSQL: {
+      type: type.BOOLEAN,
+      allowNull: false,
+      defaultValue: false,
+    },
+    SQL: {
+      type: type.BOOLEAN,
+      allowNull: false,
+      defaultValue: false,
     }
   })
 }
