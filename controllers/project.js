@@ -1,5 +1,6 @@
 const { Project } = require('../sequelize')
 const fs = require('fs')
+const { handleCreation } = require('../utils/creation')
 
 exports.getAllProjects = (req, res) => {
   Project.findAll({ order: [['createdAt', 'DESC']]})
@@ -39,58 +40,7 @@ exports.getSamples = (req, res) => {
 }
 
 exports.createProject = (req, res) => {
-  if (req.files) {
-    if (req.files.length > 1) {
-      const projectObject = JSON.parse(req.body.project)
-      const project = new Project({
-        description: projectObject.description,
-        teaching: projectObject.teaching,
-        overView: `${req.protocol}://${req.get('host')}/images/${req.files[0].filename}`,
-        image: `${req.protocol}://${req.get('host')}/images/${req.files[1].filename}`
-      })
-      if (projectObject.stacks.length) {
-        for (const stack of projectObject.stacks) {
-          project[stack] = true
-        }
-      }
-      project.save()
-        .then((data) => res.status(201).json({ message: "Project created with overview and image linked!", data}))
-        .catch((error) => res.status(500).json({ message: `Creation of project failed: ${error}`}))
-    } else if (req.files.length === 1) {
-        const projectObject = JSON.parse(req.body.project)
-        const project = new Project({
-          description: projectObject.description,
-          teaching: projectObject.teaching
-        })
-        if (projectObject.stacks.length) {
-          for (stack of projectObject.stacks) {
-            project[stack] = true
-          }
-        }
-        if (req.query.imageType === "image") {
-          project.image = `${req.protocol}://${req.get('host')}/images/${req.files[0].filename}`
-        } else if (req.query.imageType === "overview") {
-          project.overView = `${req.protocol}://${req.get('host')}/images/${req.files[0].filename}`
-        }
-        project.save()
-          .then((data) => res.status(201).json({ message: "Content created with only one image on two possible", data}))
-          .catch((error) => res.status(500).json({ message: `Creation of project failed: ${error}`}))
-    } 
-  } else {
-    const project = new Project({
-      ...req.body
-    })
-    console.log(project)
-    if (req.body.stacks.length) {
-      let stacks = req.body.stacks
-        for (const stack of stacks) {
-          project[stack] = true
-        }
-    }
-    project.save()
-      .then((data) => res.status(201).json({ message: "Project created without overview nor image linked!", data}))
-      .catch((error) => res.status(500).json({ message: `Creation of project failed: ${error}`}))
-  }
+  handleCreation(req, res)
 }
 
 exports.editSpecific = (req, res) => {
