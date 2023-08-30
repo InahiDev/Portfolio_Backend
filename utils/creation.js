@@ -5,7 +5,7 @@ const { Project } = require('../sequelize')
 //-----------------------------------------------------------------------------------------------//
 
 function updateObjectStacks(project, projectObject) {
-  if (projectObject.stacks.length) {
+  if (Array.isArray(projectObject.stacks)) {
     for (const stack of projectObject.stacks) {
       project[stack] = true
     }
@@ -13,7 +13,7 @@ function updateObjectStacks(project, projectObject) {
   return project
 }
 
-function updateCorrectFileField(req, project) {
+function updateCorrectPictureField(req, project) {
   switch (req.query.imageType) {
     case 'image' :
       project.image = `${req.protocol}://${req.get('host')}/images/${req.files[0].filename}`
@@ -50,17 +50,18 @@ function creationWithOneFile(req, res) {
     teaching: projectObject.teaching
   })
   project = updateObjectStacks(project, projectObject)
-  project = updateCorrectFileField(req, project)
+  project = updateCorrectPictureField(req, project)
   project.save()
     .then((data) => res.status(201).json({ message: "Content created with only one image on two possible", data}))
     .catch((error) => res.status(500).json({ message: `Creation of project failed: ${error}`}))
 }
 
 function creationWithNoFile(req, res) {
+  let projectObject = JSON.parse(req.body.project)
   let project = new Project({
     ...req.body
   })
-  project = updateObjectStacks(project, req.body)
+  project = updateObjectStacks(project, projectObject)
   project.save()
     .then((data) => res.status(201).json({ message: "Project created without overview nor image linked!", data}))
     .catch((error) => res.status(500).json({ message: `Creation of project failed: ${error}`}))
@@ -72,9 +73,9 @@ function handleCreation(req, res) {
       creationWithTwofiles(req, res)
     } else if (req.files.length === 1) {
       creationWithOneFile(req, res)
+    } else if (req.files.length === 0) {
+      creationWithNoFile(req, res)
     }
-  } else {
-    creationWithNoFile(req, res)
   }
 }
 
