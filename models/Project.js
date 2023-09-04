@@ -6,12 +6,12 @@ module.exports = (sequelize, type) => {
       autoIncrement: true,
       allowNull: false,
     },
-    overView: {
+    /*overView: {
       type: type.STRING
     },
     image: {
       type: type.STRING
-    },
+    },*/
     description: {
       type: type.TEXT('medium')
     },
