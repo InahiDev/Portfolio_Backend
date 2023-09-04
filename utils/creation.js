@@ -1,6 +1,6 @@
 const fs = require('fs')
 
-function handleImageDeletion(req, res, resMessage) {
+function handleWrongImageDeletion(req, res, resMessage) {
   const uploadedImage = `${req.protocol}://${req.get('host')}/images/${req.files[0].filename}`
   const filename = uploadedImage.split('/images/')[1]
   fs.unlink(`images/${filename}`, () => {
@@ -8,4 +8,4 @@ function handleImageDeletion(req, res, resMessage) {
   })
 }
 
-module.exports = { handleImageDeletion }
+module.exports = { handleWrongImageDeletion }

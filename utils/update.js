@@ -1,60 +1,61 @@
 const { Project } = require('../sequelize')
 const fs = require('fs')
 
-function updateProjectPicturesField(req, updatedProject, field1, field2) {
-  if (req.query.field1 !== "1") {
-    if (req.query.field2 === "1") {
-      updatedProject.field1 = ""
-      updatedProject.field2 = `${req.protocol}://${req.get('host')}/images/${req.files[0].filename}`
-    } else if (req.query.field2 !=="1") {
-      updatedProject.field1 = ""
-      updatedProject.field2 = ""
-    }
-  } else if (req.query.field1 === "1") {
-    if (req.query.field2 === "1") {
-      updatedProject.field1 = `${req.protocol}://${req.get('host')}/images/${req.files[0].filename}`
-      updatedProject.field2 = `${req.protocol}://${req.get('host')}/images/${req.files[1].filename}`
-    } else if (req.query.field2 !== "1") {
-      updatedProject.field1 = `${req.protocol}://${req.get('host')}/images/${req.files[0].filename}`
-      updatedProject.field2 = ""
-    }
-  }
-  return updatedProject
-}
+
+// function updateProjectPicturesField(req, updatedProject, field1, field2) {
+//   if (req.query.field1 !== "1") {
+//     if (req.query.field2 === "1") {
+//       updatedProject.field1 = ""
+//       updatedProject.field2 = `${req.protocol}://${req.get('host')}/images/${req.files[0].filename}`
+//     } else if (req.query.field2 !=="1") {
+//       updatedProject.field1 = ""
+//       updatedProject.field2 = ""
+//     }
+//   } else if (req.query.field1 === "1") {
+//     if (req.query.field2 === "1") {
+//       updatedProject.field1 = `${req.protocol}://${req.get('host')}/images/${req.files[0].filename}`
+//       updatedProject.field2 = `${req.protocol}://${req.get('host')}/images/${req.files[1].filename}`
+//     } else if (req.query.field2 !== "1") {
+//       updatedProject.field1 = `${req.protocol}://${req.get('host')}/images/${req.files[0].filename}`
+//       updatedProject.field2 = ""
+//     }
+//   }
+//   return updatedProject
+// }
 
 
-function deletePictureWhenNeeded(req, reqField, project) {
-  if (req.query.reqField !== "0" && project.reqField) {
-    const filename = project.reqField.split('/images/')[1]
-    fs.unlink(`images/${filename}`,(error) => {
-      if (error) {
-        console.log(error)
-      } else {
-        return project
-      }})
-  }
-}
+// function deletePictureWhenNeeded(req, reqField, project) {
+//   if (req.query.reqField !== "0" && project.reqField) {
+//     const filename = project.reqField.split('/images/')[1]
+//     fs.unlink(`images/${filename}`,(error) => {
+//       if (error) {
+//         console.log(error)
+//       } else {
+//         return project
+//       }})
+//   }
+// }
 
-function checkDeleteOnFields(req, project, field1, field2) {
-  deletePictureWhenNeeded(req, field1, project)
-  deletePictureWhenNeeded(req, field2, project)
-  return project
-}
+// function checkDeleteOnFields(req, project, field1, field2) {
+//   deletePictureWhenNeeded(req, field1, project)
+//   deletePictureWhenNeeded(req, field2, project)
+//   return project
+// }
 
-function updatePictures(req, projectFromDB, updatedProject, field1, field2) {
-  checkDeleteOnFields(req, projectFromDB, field1, field2)
-  updateProjectPicturesField(req, updatedProject, field1, field2)
-  return updatedProject
-}
+// function updatePictures(req, projectFromDB, updatedProject, field1, field2) {
+//   checkDeleteOnFields(req, projectFromDB, field1, field2)
+//   updateProjectPicturesField(req, updatedProject, field1, field2)
+//   return updatedProject
+// }
 
-function handleProjectUpdate(req, res, projectFromDB, field1, field2) {
-  const projectObject = JSON.parse(req.body.project)
-  let updatedProject = new Project({ ...projectObject })
-  updatedProject = updatePictures(req, projectFromDB, updatedProject, field1, field2)
-  updatedProject.update({ where: { id: req.params.id }})
-    .then((data) => res.status(200).json({ message: "Project Updated and previous Overview and Image deleted if needed", data}))
-    .catch((error) => res.status(500).json({ message: `An error has occured: ${error}`}))
-}
+// function handleProjectUpdate(req, res, projectFromDB, field1, field2) {
+//   const projectObject = JSON.parse(req.body.project)
+//   let updatedProject = new Project({ ...projectObject })
+//   updatedProject = updatePictures(req, projectFromDB, updatedProject, field1, field2)
+//   updatedProject.update({ where: { id: req.params.id }})
+//     .then((data) => res.status(200).json({ message: "Project Updated and previous Overview and Image deleted if needed", data}))
+//     .catch((error) => res.status(500).json({ message: `An error has occured: ${error}`}))
+// }
 
 
 
