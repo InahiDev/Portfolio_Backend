@@ -3,7 +3,7 @@ const fs = require('fs')
 
 exports.getCvs = (req, res) => {
   Cv.findAll({ order: [['createdAt', 'DESC']]})
-    .then(cvs => res.status(200).json(cvs))
+    .then(datas => res.status(200).json({datas}))
     .catch((error) => res.status(500).json({ message: `Couldnt GET the cvs: ${error}`}))
 }
 
@@ -14,7 +14,7 @@ exports.getSpecific = (req, res) => {
         const cv = data.cv
         res.status(200).json({cv})
       } else {
-        res.status(404).json({ message: "There is no cv with this id"})
+        res.status(404).json({ message: "There is no file with this id"})
       }
     })
     .catch((error) => res.status(500).json({ message: `Couldn't search for the desired CV in the DB: ${error}`}))

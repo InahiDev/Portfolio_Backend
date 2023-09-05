@@ -30,7 +30,7 @@ sequelize.authenticate()
   .then(() => console.log('Database connexion correct'))
   .catch((error) => console.log(`Database connexion failed: ${error}`))
 
-sequelize.sync({ alter: true })
+sequelize.sync()
   .then(() => console.log('Table created and/or updtated with Models!'))
   .catch((error) => console.log(`Update or creation of Tables failed: ${error}`))
 
