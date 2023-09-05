@@ -2,6 +2,7 @@ const Sequelize = require('sequelize');
 const UserModel = require('./models/User');
 const ProjectModel = require('./models/Project')
 const PictureModel = require('./models/Picture')
+const CvModel = require('./models/Cv')
 const dotenv = require('dotenv')
 dotenv.config()
 
@@ -17,6 +18,7 @@ const sequelize = new Sequelize('portfolio_gabriel_delaigue_db', USERNAME, PSWD,
 const User = UserModel(sequelize, Sequelize)
 const Project = ProjectModel(sequelize, Sequelize)
 const Picture = PictureModel(sequelize, Sequelize)
+const Cv = CvModel(sequelize, Sequelize)
 
 Project.hasMany(Picture, {
   foreignKey: 'projectId',
@@ -28,8 +30,8 @@ sequelize.authenticate()
   .then(() => console.log('Database connexion correct'))
   .catch((error) => console.log(`Database connexion failed: ${error}`))
 
-sequelize.sync()
+sequelize.sync({ alter: true })
   .then(() => console.log('Table created and/or updtated with Models!'))
   .catch((error) => console.log(`Update or creation of Tables failed: ${error}`))
 
-module.exports = { User, Project, Picture }
+module.exports = { User, Project, Picture, Cv }

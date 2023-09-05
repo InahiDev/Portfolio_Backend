@@ -8,8 +8,12 @@ module.exports = (sequelize, type) => {
     },
     imageType: {
       type: type.STRING,
+      allowNull: false
     },
     path: {
+      type: type.STRING
+    },
+    alt: {
       type: type.STRING
     }
   })

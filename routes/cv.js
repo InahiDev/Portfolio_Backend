@@ -1,13 +1,13 @@
 const express = require('express')
 const router = express.Router()
 const cvCtrl = require('../controllers/cv')
-const multer = require('../middleware/multer-config')
+const multer = require('../middleware/multer-blob')
 const auth = require('../middleware/auth')
 
 router.get('/', cvCtrl.getCvs)
 router.get('/:id', cvCtrl.getSpecific)
-router.post('/', auth, cvCtrl.createCv)
+router.post('/', auth, multer, cvCtrl.createCv)
 router.put('/:id', auth, cvCtrl.updateSpecific)
-router.delete('/:id', auth, multer, cvCtrl.deleteSpecific)
+router.delete('/:id', auth, cvCtrl.deleteSpecific)
 
 module.exports = router

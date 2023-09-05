@@ -4,6 +4,32 @@ const jwt = require('jsonwebtoken')
 const validator = require('validator')
 const TOKEN_KEY = process.env.TOKEN_KEY
 
+module.exports.signup = (req, res) => {
+  if (validator.isEmail(req.body.email)) {
+    User.findAll({ where: { email: req.body.email }})
+      .then(data => {
+        if (data.length !== 0) {
+          return res.status(400).json({ message: `This email already has an account, please login instead`})
+        } else {
+          bcrypt.hash(req.body.password, 10)
+            .then(hash => {
+              const user = new User({
+                email: req.body.email,
+                password: hash
+              })
+              user.save()
+                .then(() => res.status(201).json({ message: "User account created succesfully!" }))
+                .catch((error) => res.status(500).json({ message: `Oops something went wrong during registration in the DB ${error}` }))
+            })
+            .catch((error) => res.status(500).json({ message: `Oops something went wrong while hashing password: ${error}`}))
+
+        }
+      })
+  } else {
+    res.status(400).json({ message: "That's not an email buddy!"})
+  }
+}
+
 module.exports.login = (req, res) => {
   if (validator.isEmail(req.body.email)) {
     User.findAll({ where: { email: req.body.email }})

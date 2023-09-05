@@ -64,13 +64,13 @@ exports.addPicture = (req, res) => {
             let imageTypeRegex = /^overview$|^image$/gm
             const isImageTypeCorrect = imageTypeRegex.test(req.body.imageType)
             if (data)  {
-              console.log(data)
               handleWrongImageDeletion(req, res, "One image of this type is allready linked and saved with this project")
             } else if (!isImageTypeCorrect) {
               handleWrongImageDeletion(req, res, "ImageType not recognized")
             } else if (isImageTypeCorrect && !data) {
               const pictureObject = new Picture({
                 imageType: req.body.imageType,
+                alt: req.body.alt,
                 path: `${req.protocol}://${req.get('host')}/images/${req.files[0].filename}`,
                 projectId: req.params.id
               })
@@ -137,12 +137,13 @@ exports.editProjectPicture = (req, res) => {
         Picture.findOne({ where: { projectId: req.params.id, imageType: req.body.imageType }})
           .then((picture) => {
             let newPath = `${req.protocol}://${req.get('host')}/images/${req.files[0].filename}`
+            let newAlt = req.body.alt
             let imageTypeRegex = /^overview$|^image$/gm
             const isImageTypeCorrect = imageTypeRegex.test(req.body.imageType)
             if (picture) {
               let filename = picture.path.split('/images/')[1]
               fs.unlink(`images/${filename}`, () => {
-                Picture.update({ path: newPath }, { where: { projectId: req.params.id, imageType: req.body.imageType }})
+                Picture.update({ path: newPath, alt: newAlt }, { where: { projectId: req.params.id, imageType: req.body.imageType }})
                   .then((data) => res.status(200).json({ message: "Picture updated and previous picture deleted" }))
                   .catch((error) => res.status(500).json({ message: `Something happened while updating Picture.path in the DB! : ${error}`}))
               })
@@ -150,6 +151,7 @@ exports.editProjectPicture = (req, res) => {
               if (isImageTypeCorrect) {
                 let newPicture = new Picture({
                   path: newPath,
+                  alt: newAlt,
                   id: req.params.id,
                   imageType: req.body.imageType
                 })
