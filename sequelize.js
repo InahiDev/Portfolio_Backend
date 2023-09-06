@@ -2,7 +2,7 @@ const Sequelize = require('sequelize');
 const UserModel = require('./models/User');
 const ProjectModel = require('./models/Project')
 const PictureModel = require('./models/Picture')
-const CvModel = require('./models/Cv')
+const FileModel = require('./models/File')
 const dotenv = require('dotenv')
 dotenv.config()
 
@@ -18,7 +18,7 @@ const sequelize = new Sequelize('portfolio_gabriel_delaigue_db', USERNAME, PSWD,
 const User = UserModel(sequelize, Sequelize)
 const Project = ProjectModel(sequelize, Sequelize)
 const Picture = PictureModel(sequelize, Sequelize)
-const Cv = CvModel(sequelize, Sequelize)
+const File = FileModel(sequelize, Sequelize)
 
 Project.hasMany(Picture, {
   foreignKey: 'projectId',
@@ -34,4 +34,4 @@ sequelize.sync()
   .then(() => console.log('Table created and/or updtated with Models!'))
   .catch((error) => console.log(`Update or creation of Tables failed: ${error}`))
 
-module.exports = { User, Project, Picture, Cv }
+module.exports = { User, Project, Picture, File }

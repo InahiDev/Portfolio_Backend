@@ -9,7 +9,7 @@ dotenv.config()
 
 const projectRoutes = require('./routes/project')
 const userRoutes = require('./routes/user')
-const cvRoutes = require('./routes/cv')
+const fileRoutes = require('./routes/file')
 
 const app = express()
 
@@ -31,6 +31,6 @@ app.use(helmet({
 
 app.use('/api/v1/auth', userRoutes)
 app.use('/api/v1/project', projectRoutes)
-app.use('/api/v1/cv', cvRoutes)
+app.use('/api/v1/file', fileRoutes)
 
 module.exports = app

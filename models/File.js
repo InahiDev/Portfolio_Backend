@@ -1,5 +1,5 @@
 module.exports = (sequelize, type) => {
-  return sequelize.define('cv', {
+  return sequelize.define('file', {
     id: {
       type: type.INTEGER,
       primaryKey: true,
