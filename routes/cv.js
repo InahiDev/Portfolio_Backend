@@ -7,7 +7,7 @@ const auth = require('../middleware/auth')
 router.get('/', cvCtrl.getCvs)
 router.get('/:id', cvCtrl.getSpecific)
 router.post('/', auth, multer, cvCtrl.createCv)
-router.put('/:id', auth, cvCtrl.updateSpecific)
+router.put('/:id', auth, multer, cvCtrl.updateSpecific)
 router.delete('/:id', auth, cvCtrl.deleteSpecific)
 
 module.exports = router
